@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incremental Game with Combat & Equipment</title>
+    <title>Incremental Game with Combat, Equipment, & Upgrades</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,27 +19,31 @@
         .button:hover {
             background-color: #ddd;
         }
-        .stats, .equipment, .enemies {
+        .stats, .equipment, .enemies, .upgrades {
             margin: 20px 0;
         }
-        .enemy {
+        .enemy, .upgrade {
             margin: 15px;
             border: 1px solid #ccc;
             padding: 10px;
             display: inline-block;
-            width: 200px;
+            width: 250px;
+        }
+        .enemy button, .upgrade button {
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Incremental Game with Combat & Equipment</h1>
+    <h1>Incremental Game with Combat, Equipment, & Upgrades</h1>
     <div class="stats">
-        <p><b>Qi:</b> <span id="qi">0</span></p>
-        <p><b>Qi per click:</b> <span id="qi-per-click">1</span></p>
-        <p><b>Combat Power:</b> <span id="combat-power">0</span></p>
+        <p><b>Qi:</b> <span id="qi">0.00</span></p>
+        <p><b>Qi per click:</b> <span id="qi-per-click">1.00</span></p>
+        <p><b>Qi per second:</b> <span id="qi-per-second">0.00</span></p>
+        <p><b>Combat Power:</b> <span id="combat-power">0.00</span></p>
         <p><b>Prestige Points:</b> <span id="prestige-points">0</span></p>
-        <p><b>Qi Boost from Prestige:</b> <span id="prestige-boost">1</span>x</p>
-        <p><b>Prestige Cost:</b> <span id="prestige-cost">100</span></p>
+        <p><b>Qi Boost from Prestige:</b> <span id="prestige-boost">1.00</span>x</p>
+        <p><b>Prestige Cost:</b> <span id="prestige-cost">100.00</span></p>
     </div>
     <button class="button" onclick="gainQi()">Gain Qi</button>
     <button class="button" onclick="prestige()">Prestige</button>
@@ -51,6 +55,9 @@
         <p><b>Slot 2:</b> <span id="slot-2">Empty</span></p>
         <p><b>Slot 3:</b> <span id="slot-3">Empty</span></p>
     </div>
+
+    <h2>Upgrades</h2>
+    <div id="upgrades"></div>
 
     <h2>Enemies</h2>
     <div id="enemies"></div>
