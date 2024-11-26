@@ -117,4 +117,50 @@ function renderUpgrades() {
 
 // Buy Upgrade
 function buyUpgrade(id) {
-    const upgrade =
+    const upgrade = upgrades.find((u) => u.id === id);
+    if (prestigePoints >= upgrade.cost && !upgrade.purchased) {
+        prestigePoints -= upgrade.cost;
+        upgrade.effect();
+        upgrade.purchased = true;
+        updateUI();
+    }
+}
+
+// Render Enemies
+function renderEnemies() {
+    const enemiesDiv = document.getElementById("enemies");
+    enemiesDiv.innerHTML = "";
+    enemies.forEach((enemy) => {
+        const canDefeat = combatPower >= enemy.power ? "Can Fight!" : "Too Strong!";
+        const enemyDiv = document.createElement("div");
+        enemyDiv.className = "enemy";
+        enemyDiv.innerHTML = `
+            <p><b>Enemy Level:</b> ${enemy.level}</p>
+            <p><b>Required Power:</b> ${enemy.power}</p>
+            <p><b>Reward:</b> +${enemy.reward} Combat Power</p>
+            <button class="button" onclick="fightEnemy(${enemy.level})" ${
+            combatPower >= enemy.power ? "" : "disabled"
+        }>${canDefeat}</button>
+        `;
+        enemiesDiv.appendChild(enemyDiv);
+    });
+}
+
+// Fight Enemy
+function fightEnemy(level) {
+    const enemy = enemies.find((e) => e.level === level);
+    if (combatPower >= enemy.power) {
+        const fightDuration = Math.max(enemy.speed / (combatPower / enemy.power), 500);
+        alert(`Fighting Enemy Level ${level}...`);
+        setTimeout(() => {
+            alert(`Enemy Level ${level} Defeated!`);
+            combatPower += enemy.reward;
+            updateUI();
+        }, fightDuration);
+    } else {
+        alert("Not enough Combat Power to defeat this enemy!");
+    }
+}
+
+// Initialize UI
+updateUI();
