@@ -1,9 +1,11 @@
+// Initial Game Variables
 let qi = parseInt(localStorage.getItem('qi')) || 0;
 let qiPerClick = parseInt(localStorage.getItem('qiPerClick')) || 1;
 let combatPower = parseInt(localStorage.getItem('combatPower')) || 0;
 let prestigePoints = parseInt(localStorage.getItem('prestigePoints')) || 0;
 let prestigeBoost = 1 + prestigePoints;
 
+// Enemy Definitions
 const enemies = [
     { level: 1, power: 10, reward: 5 },
     { level: 2, power: 25, reward: 15 },
@@ -12,6 +14,7 @@ const enemies = [
     { level: 5, power: 200, reward: 100 },
 ];
 
+// Update UI Elements
 function updateUI() {
     document.getElementById('qi').innerText = qi;
     document.getElementById('qi-per-click').innerText = qiPerClick * prestigeBoost;
@@ -21,21 +24,23 @@ function updateUI() {
     renderEnemies();
 }
 
+// Gain Qi
 function gainQi() {
     qi += qiPerClick * prestigeBoost;
-    combatPower += Math.floor((qiPerClick * prestigeBoost) / 10); // Small Qi-based CP boost
+    combatPower += Math.floor((qiPerClick * prestigeBoost) / 10); // Small boost from Qi
     localStorage.setItem('qi', qi);
     localStorage.setItem('combatPower', combatPower);
     updateUI();
 }
 
+// Prestige
 function prestige() {
-    if (qi >= 100) { // Example threshold for prestige
+    if (qi >= 100) { // Threshold to prestige
         prestigePoints += 1;
         prestigeBoost = 1 + prestigePoints;
         qi = 0;
         qiPerClick = 1; // Reset upgrades
-        combatPower = 0; // Reset combat power
+        combatPower = 0; // Reset Combat Power
         localStorage.setItem('prestigePoints', prestigePoints);
         localStorage.setItem('qi', qi);
         localStorage.setItem('qiPerClick', qiPerClick);
@@ -46,6 +51,7 @@ function prestige() {
     }
 }
 
+// Render Enemies
 function renderEnemies() {
     const enemiesDiv = document.getElementById('enemies');
     enemiesDiv.innerHTML = '';
@@ -65,6 +71,7 @@ function renderEnemies() {
     });
 }
 
+// Fight Enemy
 function fightEnemy(level) {
     const enemy = enemies.find((e) => e.level === level);
     if (combatPower >= enemy.power) {
