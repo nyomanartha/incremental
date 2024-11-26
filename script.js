@@ -14,8 +14,8 @@ let equipmentSlots = ["Empty", "Empty", "Empty"];
 let upgrades = [
     { id: 1, name: "2x More Qi", cost: 1, effect: () => (qiPerClick *= 2), purchased: false },
     { id: 2, name: "3x More Qi", cost: 3, effect: () => (qiPerClick *= 3), purchased: false },
-    { id: 3, name: "10% Qi per Second", cost: 5, effect: () => (qiPerSecond += qi * 0.1), purchased: false },
-    { id: 4, name: "25% Qi per Second", cost: 10, effect: () => (qiPerSecond += qi * 0.25), purchased: false },
+    { id: 3, name: "10% Qi per Second", cost: 5, effect: () => qiPerSecond += qi * 0.1, purchased: false },
+    { id: 4, name: "25% Qi per Second", cost: 10, effect: () => qiPerSecond += qi * 0.25, purchased: false },
 ];
 
 // Enemies
@@ -46,9 +46,7 @@ function updateUI() {
 // Gain Qi
 function gainQi() {
     qi += qiPerClick * prestigeBoost;
-    combatPower += Math.floor((qiPerClick * prestigeBoost) / 10); // Small combat power boost
     localStorage.setItem("qi", qi);
-    localStorage.setItem("combatPower", combatPower);
     updateUI();
 }
 
@@ -62,6 +60,7 @@ function prestige() {
         combatPower = 0;
         prestigeCost = Math.floor(prestigeCost * 1.1);
         equipmentSlots = ["Empty", "Empty", "Empty"]; // Reset equipment on prestige
+        upgrades.forEach((upgrade) => (upgrade.purchased = false)); // Reset upgrades
         localStorage.setItem("prestigePoints", prestigePoints);
         localStorage.setItem("qi", qi);
         localStorage.setItem("qiPerClick", qiPerClick);
@@ -151,16 +150,20 @@ function fightEnemy(level) {
     const enemy = enemies.find((e) => e.level === level);
     if (combatPower >= enemy.power) {
         const fightDuration = Math.max(enemy.speed / (combatPower / enemy.power), 500);
-        alert(`Fighting Enemy Level ${level}...`);
         setTimeout(() => {
-            alert(`Enemy Level ${level} Defeated!`);
             combatPower += enemy.reward;
             updateUI();
         }, fightDuration);
-    } else {
-        alert("Not enough Combat Power to defeat this enemy!");
     }
 }
+
+// Start the passive Qi generation
+setInterval(() => {
+    if (qiPerSecond > 0) {
+        qi += qiPerSecond;
+        updateUI();
+    }
+}, 1000);
 
 // Initialize UI
 updateUI();
