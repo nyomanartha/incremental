@@ -117,4 +117,4 @@ function renderUpgrades() {
 
 // Buy Upgrade
 function buyUpgrade(id) {
-    const upgrade = upgrades.find((
+    const upgrade =
