@@ -26,6 +26,8 @@
             margin: 15px;
             border: 1px solid #ccc;
             padding: 10px;
+            display: inline-block;
+            width: 200px;
         }
     </style>
 </head>
@@ -36,12 +38,10 @@
         <p><b>Qi per click:</b> <span id="qi-per-click">1</span></p>
         <p><b>Combat Power:</b> <span id="combat-power">0</span></p>
         <p><b>Prestige Points:</b> <span id="prestige-points">0</span></p>
+        <p><b>Qi Boost from Prestige:</b> <span id="prestige-boost">1</span>x</p>
     </div>
     <button class="button" onclick="gainQi()">Gain Qi</button>
     <button class="button" onclick="prestige()">Prestige</button>
-    <div class="stats">
-        <p><b>Qi Boost from Prestige:</b> <span id="prestige-boost">1</span>x</p>
-    </div>
 
     <h2>Enemies</h2>
     <div id="enemies"></div>
