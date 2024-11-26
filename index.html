@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incremental Game with Combat</title>
+    <title>Incremental Game with Combat & Equipment</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@
         .button:hover {
             background-color: #ddd;
         }
-        .stats {
+        .stats, .equipment, .enemies {
             margin: 20px 0;
         }
         .enemy {
@@ -32,16 +32,25 @@
     </style>
 </head>
 <body>
-    <h1>Incremental Game with Combat</h1>
+    <h1>Incremental Game with Combat & Equipment</h1>
     <div class="stats">
         <p><b>Qi:</b> <span id="qi">0</span></p>
         <p><b>Qi per click:</b> <span id="qi-per-click">1</span></p>
         <p><b>Combat Power:</b> <span id="combat-power">0</span></p>
         <p><b>Prestige Points:</b> <span id="prestige-points">0</span></p>
         <p><b>Qi Boost from Prestige:</b> <span id="prestige-boost">1</span>x</p>
+        <p><b>Prestige Cost:</b> <span id="prestige-cost">100</span></p>
     </div>
     <button class="button" onclick="gainQi()">Gain Qi</button>
     <button class="button" onclick="prestige()">Prestige</button>
+    <button class="button" onclick="hardReset()">Hard Reset</button>
+
+    <h2>Equipment</h2>
+    <div class="equipment">
+        <p><b>Slot 1:</b> <span id="slot-1">Empty</span></p>
+        <p><b>Slot 2:</b> <span id="slot-2">Empty</span></p>
+        <p><b>Slot 3:</b> <span id="slot-3">Empty</span></p>
+    </div>
 
     <h2>Enemies</h2>
     <div id="enemies"></div>
