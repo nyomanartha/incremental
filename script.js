@@ -3,19 +3,19 @@ let qi = parseFloat(localStorage.getItem("qi")) || 0;
 let qiPerClick = parseFloat(localStorage.getItem("qiPerClick")) || 1;
 let combatPower = parseFloat(localStorage.getItem("combatPower")) || 0;
 let prestigePoints = parseInt(localStorage.getItem("prestigePoints")) || 0;
-let prestigeBoost = 1 + prestigePoints * 0.1; // Prestige increases Qi multiplier by 10% per point
+let prestigeBoost = 1 + prestigePoints * 0.1;
 let prestigeCost = parseFloat(localStorage.getItem("prestigeCost")) || 100;
-let qiPerSecond = 0;
+let qiPerSecond = parseFloat(localStorage.getItem("qiPerSecond")) || 0;
 
 // Equipment
-let equipmentSlots = ["Empty", "Empty", "Empty"];
+let equipmentSlots = JSON.parse(localStorage.getItem("equipmentSlots")) || ["Empty", "Empty", "Empty"];
 
 // Upgrades
-let upgrades = [
+let upgrades = JSON.parse(localStorage.getItem("upgrades")) || [
     { id: 1, name: "2x More Qi", cost: 1, effect: () => (qiPerClick *= 2), purchased: false },
     { id: 2, name: "3x More Qi", cost: 3, effect: () => (qiPerClick *= 3), purchased: false },
-    { id: 3, name: "10% Qi per Second", cost: 5, effect: () => qiPerSecond += qi * 0.1, purchased: false },
-    { id: 4, name: "25% Qi per Second", cost: 10, effect: () => qiPerSecond += qi * 0.25, purchased: false },
+    { id: 3, name: "10% Qi per Second", cost: 5, effect: () => (qiPerSecond += qi * 0.1), purchased: false },
+    { id: 4, name: "25% Qi per Second", cost: 10, effect: () => (qiPerSecond += qi * 0.25), purchased: false },
 ];
 
 // Enemies
@@ -26,6 +26,15 @@ let enemies = [
     { level: 4, power: 100, reward: 50, speed: 1500 },
     { level: 5, power: 200, reward: 100, speed: 1000 },
 ];
+
+// Apply Upgrades on Load
+function applyUpgrades() {
+    upgrades.forEach((upgrade) => {
+        if (upgrade.purchased) {
+            upgrade.effect();
+        }
+    });
+}
 
 // Update the UI
 function updateUI() {
@@ -59,13 +68,14 @@ function prestige() {
         qiPerClick = 1;
         combatPower = 0;
         prestigeCost = Math.floor(prestigeCost * 1.1);
-        equipmentSlots = ["Empty", "Empty", "Empty"]; // Reset equipment on prestige
-        upgrades.forEach((upgrade) => (upgrade.purchased = false)); // Reset upgrades
+
+        // Store permanent changes
         localStorage.setItem("prestigePoints", prestigePoints);
         localStorage.setItem("qi", qi);
         localStorage.setItem("qiPerClick", qiPerClick);
         localStorage.setItem("combatPower", combatPower);
         localStorage.setItem("prestigeCost", prestigeCost);
+        localStorage.setItem("upgrades", JSON.stringify(upgrades));
         updateUI();
     } else {
         alert("Not enough Qi to Prestige!");
@@ -92,6 +102,7 @@ function hardReset() {
             { level: 4, power: 100, reward: 50, speed: 1500 },
             { level: 5, power: 200, reward: 100, speed: 1000 },
         ];
+        localStorage.setItem("upgrades", JSON.stringify(upgrades));
         updateUI();
     }
 }
@@ -121,6 +132,10 @@ function buyUpgrade(id) {
         prestigePoints -= upgrade.cost;
         upgrade.effect();
         upgrade.purchased = true;
+
+        // Save upgrades and prestige points
+        localStorage.setItem("prestigePoints", prestigePoints);
+        localStorage.setItem("upgrades", JSON.stringify(upgrades));
         updateUI();
     }
 }
@@ -157,7 +172,7 @@ function fightEnemy(level) {
     }
 }
 
-// Start the passive Qi generation
+// Passive Qi Generation
 setInterval(() => {
     if (qiPerSecond > 0) {
         qi += qiPerSecond;
@@ -165,5 +180,6 @@ setInterval(() => {
     }
 }, 1000);
 
-// Initialize UI
+// Initialize
+applyUpgrades();
 updateUI();
